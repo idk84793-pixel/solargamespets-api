@@ -5,12 +5,30 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-let pets = [];
+let pets = [
+  {
+    category: "Pet",
+    configData: {
+      id: "Unicorn Dragon",
+      pt: 1
+    },
+    value: 816593
+  },
+  {
+    category: "Pet",
+    configData: {
+      id: "Huge Cat"
+    },
+    value: 120000
+  }
+];
 
+// homepage
 app.get("/", (req, res) => {
   res.send("SolarGamesPets API is running");
 });
 
+// get exist values
 app.get("/api/exists", (req, res) => {
   res.json({
     status: "ok",
@@ -18,20 +36,18 @@ app.get("/api/exists", (req, res) => {
   });
 });
 
-app.post("/api/addPet", (req, res) => {
-  const { category, configData, value } = req.body;
+// manually add a pet through browser
+app.get("/api/add", (req, res) => {
+  const { id, value } = req.query;
 
-  if (!category || !configData || value === undefined) {
-    return res.status(400).json({
-      status: "error",
-      message: "Missing category, configData, or value"
-    });
+  if (!id || !value) {
+    return res.send("Use /api/add?id=PetName&value=123");
   }
 
   const pet = {
-    category,
-    configData,
-    value
+    category: "Pet",
+    configData: { id: id },
+    value: Number(value)
   };
 
   pets.push(pet);
@@ -40,25 +56,6 @@ app.post("/api/addPet", (req, res) => {
     status: "ok",
     message: "Pet added",
     data: pet
-  });
-});
-
-app.post("/api/setExists", (req, res) => {
-  const { data } = req.body;
-
-  if (!Array.isArray(data)) {
-    return res.status(400).json({
-      status: "error",
-      message: "data must be an array"
-    });
-  }
-
-  pets = data;
-
-  res.json({
-    status: "ok",
-    message: "Exist data updated",
-    count: pets.length
   });
 });
 
