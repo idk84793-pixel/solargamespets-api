@@ -8,11 +8,8 @@ app.use(express.json());
 let pets = [];
 
 // GET all pets / exist data
-app.get("/api/exists", (req, res) => {
-  res.json({
-    status: "ok",
-    data: pets
-  });
+app.get("/", (req, res) => {
+  res.send("SolarGamesPets API is running");
 });
 
 // POST one pet
@@ -62,5 +59,5 @@ app.post("/api/setExists", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`API running on http://localhost:${PORT}`);
+  console.log(`API running on port ${PORT}`);
 });
