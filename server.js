@@ -5,64 +5,42 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-/*
-MANUALLY EDIT THIS LIST.
+let pets = [];
+let lastUpdate = 0;
 
-Each entry must follow the same structure your ExistCount
-script expects from the API.
-*/
-const pets = [
-  {
-    category: "Pet",
-    configData: {
-      id: "Unicorn Dragon",
-      pt: 1
-    },
-    value: 1
-  },
-  {
-    category: "Pet",
-    configData: {
-      id: "Huge Cat"
-    },
-    value: 1
-  }
-];
-const pets = [
-  {
-    category: "Pet",
-    configData: {
-      id: "Cat",
-      pt: 1
-    },
-    value: 1
-  },
-  {
-    category: "Pet",
-    configData: {
-      id: "Dog"
-    },
-    value: 1
-  }
-];
-/* Homepage */
 app.get("/", (req, res) => {
   res.send("SolarGamesPets API is running");
 });
 
-/*
-ExistCount endpoint
-This is what your Roblox script will call
-*/
 app.get("/api/exists", (req, res) => {
   res.json({
     status: "ok",
+    lastupdate: lastUpdate,
     data: pets
   });
 });
 
-/* Start server */
+app.post("/api/exists", (req, res) => {
+  const { data } = req.body;
+
+  if (!Array.isArray(data)) {
+    return res.status(400).json({
+      status: "error",
+      message: "data must be an array"
+    });
+  }
+
+  pets = data;
+  lastUpdate = Date.now();
+
+  res.json({
+    status: "ok",
+    message: "Exists updated",
+    count: pets.length,
+    lastupdate: lastUpdate
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`API running on port ${PORT}`);
 });
-
