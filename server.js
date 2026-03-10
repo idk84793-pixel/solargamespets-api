@@ -5,30 +5,55 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-let pets = [
+/*
+MANUALLY EDIT THIS LIST.
+
+Each entry must follow the same structure your ExistCount
+script expects from the API.
+*/
+const pets = [
   {
     category: "Pet",
     configData: {
       id: "Unicorn Dragon",
       pt: 1
     },
-    value: 816593
+    value: 1
   },
   {
     category: "Pet",
     configData: {
       id: "Huge Cat"
     },
-    value: 120000
+    value: 1
   }
 ];
-
-// homepage
+const pets = [
+  {
+    category: "Pet",
+    configData: {
+      id: "Cat",
+      pt: 1
+    },
+    value: 1
+  },
+  {
+    category: "Pet",
+    configData: {
+      id: "Dog"
+    },
+    value: 1
+  }
+];
+/* Homepage */
 app.get("/", (req, res) => {
   res.send("SolarGamesPets API is running");
 });
 
-// get exist values
+/*
+ExistCount endpoint
+This is what your Roblox script will call
+*/
 app.get("/api/exists", (req, res) => {
   res.json({
     status: "ok",
@@ -36,29 +61,7 @@ app.get("/api/exists", (req, res) => {
   });
 });
 
-// manually add a pet through browser
-app.get("/api/add", (req, res) => {
-  const { id, value } = req.query;
-
-  if (!id || !value) {
-    return res.send("Use /api/add?id=PetName&value=123");
-  }
-
-  const pet = {
-    category: "Pet",
-    configData: { id: id },
-    value: Number(value)
-  };
-
-  pets.push(pet);
-
-  res.json({
-    status: "ok",
-    message: "Pet added",
-    data: pet
-  });
-});
-
+/* Start server */
 app.listen(PORT, () => {
   console.log(`API running on port ${PORT}`);
 });
