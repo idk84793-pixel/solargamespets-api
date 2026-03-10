@@ -7,12 +7,17 @@ app.use(express.json());
 
 let pets = [];
 
-// GET all pets / exist data
 app.get("/", (req, res) => {
   res.send("SolarGamesPets API is running");
 });
 
-// POST one pet
+app.get("/api/exists", (req, res) => {
+  res.json({
+    status: "ok",
+    data: pets
+  });
+});
+
 app.post("/api/addPet", (req, res) => {
   const { category, configData, value } = req.body;
 
@@ -38,7 +43,6 @@ app.post("/api/addPet", (req, res) => {
   });
 });
 
-// POST many pets at once
 app.post("/api/setExists", (req, res) => {
   const { data } = req.body;
 
